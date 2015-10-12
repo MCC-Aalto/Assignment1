@@ -1,0 +1,13 @@
+extends layout
+
+block content
+	a(href="../calendar")= "Back to MyCalendar"
+	h1.
+		title
+	form#formAddEvent(name="addevent",method="post",action="/addevent") 
+		input#inputUser(type="text", placeholder="username", name="username")
+		input#inputTitle(type="text", placeholder="title", name="title")
+		input#inputDescription(type="text", placeholder="description", name="description")
+		input#inputStartDate(type="datetime-local", name="startDate")
+		input#inputEndDate(type="datetime-local", name="endDate")
+		button#btnSubmit(type="submit") submit

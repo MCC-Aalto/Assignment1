@@ -1,0 +1,2 @@
+2015-10-12T15:48:50.708+0200 I CONTROL  Trying to install Windows service 'MongoDB'
+2015-10-12T15:48:50.710+0200 I CONTROL  Error connecting to the Service Control Manager: Zugriff verweigert (5)

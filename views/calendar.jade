@@ -1,0 +1,12 @@
+extends layout
+
+block content
+	h1.
+		Calendar Overview #{user}
+	a(href="../newevent")= "New calendar entry"		
+	ul
+		each event, i in events
+			li
+				a(href="./event/" + event._id)= event.title
+				p= "Start: " + event.start + " - End: " + event.end
+				p= event.description
