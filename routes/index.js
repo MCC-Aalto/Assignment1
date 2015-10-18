@@ -12,11 +12,6 @@ router.get('/', function(req, res, next) {
 	res.render('index', { title: 'Express' });
 });
 
-/* Hello World Test Page */
-router.get('/helloworld', function(req, res) {
-	res.render('helloworld', {title: 'Hello, World'});
-});
-
 /* GET users of DB */
 router.get('/userlist', function(req, res) {
 	var db = req.db;
@@ -30,14 +25,20 @@ router.get('/userlist', function(req, res) {
 });
 
 /* GET user and his events */
-router.get('/userlist/:user', function(req, res) {
+router.get('/userlist/:userid', function(req, res) {
 	var db = req.db;
 	var collection = db.get('events');
-	var username = req.params.user;
+	var user = mongo.ObjectID(req.params.userid);
 	
 	// in events there is no username yet !!!
-	collection.findOne({"username" : username}, function(err, e) {
-		req.send("Error: No Usernames in events now");
+	collection.find({"user" : user}, function(err, docs) {
+		if(err) {
+			res.send("Error: No Usernames in events now");
+		} else {
+			res.render('user', {
+				"events" : docs
+			});
+		}
 	});
 });
 
@@ -46,35 +47,12 @@ router.get('/calendar', function(req, res) {
 	var db = req.db;
 	var collection = db.get('events');
 	
-	collection.find({},{},function(req,res) {
+	collection.find({},{},function(err, docs) {
 		res.render('calendar', {
 			"user" : user,
 			"events" : docs
 		});
 	});
-});
-
-// *** editform for a given event
-router.get('/calendar/:eventId', function(req, res) {	
-	var db = req.db;
-	var collection = db.get('events');
-	var eID = req.params.eventId;	
-
-	console.log(mongo);
-	collection.findOne({"_id" : eID}, function(err, e) {
-		if (err) {
-			res.redirect("calendar");
-		} else {
-			res.render('event', {
-				"event" : e
-			});
-		}
-	});
-});
-
-// *** Update an event
-router.post('/calendar/:eventId', function(req, res) {
-	req.send("Not implemented yet.");
 });
 
 // *** input for new event
@@ -83,29 +61,90 @@ router.get('/newevent', function(req, res) {
 });
 
 // *** add new event to DB
-router.post('/calendar/new', function(req, res) {
+router.post('/calendar', function(req, res) {
 	// *** database connection
 	var db = req.db;
 	var collection = db.get("events");
+	var usercollection = db.get("users");
 	// *** form variables
-	var username = req.body.username;
+	var user = usercollection.findOne({"username" : req.body.username})._id;
 	var title = req.body.title;
 	var description = req.body.description;
 	var start = req.body.startDate;
-	var end = req.body.endDate;
+	var end = req.body.endDate;	
 	// *** insert
 	collection.insert({
 		"title" : title,
 		"description" : description,
 		"start" : new Date(start),
 		"end" : new Date(end),
-		"user" : username
+		"user" : mongo.ObjectID(user)
 	}, function(err, doc) {
 		// *** query success or failure
 		if (err) {
 			res.send("Error: No event was added to database.");
 		} else {
 			res.redirect("calendar");
+		}
+	});
+});
+
+// *** editform for a given event
+router.get('/calendar/:eventId', function(req, res) {	
+	var db = req.db;
+	var collection = db.get('events');
+	var eID = mongo.ObjectID(req.params.eventId);	
+
+	collection.findOne({"_id" : eID}, function(err, e) {
+		if (err) {
+			res.redirect("calendar");
+		} else {
+			res.render('event', {
+				"name" : e.title,
+				"event" : e
+			});
+		}
+	});
+});
+
+// Delete calendar entry
+router.delete('/calendar/:eventId', function(req, res, next) {
+	var db = req.db;
+	var collection = db.get('events');
+	var eID = mongo.ObjectID(req.params.eventId);
+	
+	console.log("hierher komm ich noch");
+	
+	collection.remove({"_id" : eID}, function(err, post) {
+		console.log("jaja");
+		if (err) return next(err);
+		res.redirect("calendar");
+	});
+});
+
+// *** Update an event
+router.put('/calendar/:eventId', function(req, res) {
+	var db = req.db;
+	var collection = db.get('events');
+	var usercollection = db.get('users');
+	var eID = mongo.ObjectID(req.params.eventId);
+	
+	var user = usercollection.findOne({"username" : req.body.username})._id;
+	var title = req.body.title;
+	var description = req.body.description;
+	var start = req.body.startDate;
+	var end = req.body.endDate;	
+	
+	collection.findAndModify({
+		query: {_id: eID},
+		update: {$set:
+			{
+				title: title,
+				description: description,
+				start: new Date(start),
+				end: new Date(end),
+				user: mongo.ObjectID(user)
+			}
 		}
 	});
 });

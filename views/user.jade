@@ -1,0 +1,15 @@
+extends layout
+
+block content
+	a(href="../userlist/")= "Back to userlist"
+	h1.
+		User Overview
+    
+	ul
+		each event, i in events
+			li
+				a(href="../calendar/" + event._id)= event.title
+				p.
+					<strong>Start:</strong> #{event.start} <strong> - End:</strong> #{event.end}
+				p.
+					<strong>Description:</strong> #{event.description}

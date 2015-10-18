@@ -1,0 +1,19 @@
+extends layout
+
+block content
+	h1.
+		Event '#{name}'
+	p.
+		<strong>Start:</strong> #{event.start}
+	p.
+		<strong>End:</strong> #{event.end}
+	p.
+		<strong>Description:</strong>
+		#{event.description)
+	p.
+		<strong>User:</strong> #{event.user}
+	
+	form#formAddEvent(name="removeEvent",method="DELETE",action="/calendar/#{event._id}")
+		button#btnSubmit(type="submit") submit
+	
+	a(href="../calendar/#{event._id}?_method=DELETE")= "Delete " + event.title
