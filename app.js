@@ -5,7 +5,7 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-// *** MongoDB connection
+/* MongoDB */
 var mongo = require('mongodb');
 var monk = require('monk');
 var db = monk('localhost:27017/calendar');
@@ -13,10 +13,8 @@ var db = monk('localhost:27017/calendar');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
-// *** instantiates Express
 var app = express();
 
-// *** where to find files
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
@@ -29,7 +27,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// *** DB accessability
+/* DB accessability */
 app.use(function(req,res,next) {
 	req.db = db;
 	next();
@@ -38,7 +36,7 @@ app.use(function(req,res,next) {
 app.use('/', routes);
 app.use('/users', users);
 
-// *** error handlers for development and production
+/* error handlers for development and production */
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
