@@ -1,0 +1,14 @@
+2015-10-13T09:34:50.258+0200 I CONTROL  Trying to start Windows service 'MongoDB'
+2015-10-13T09:34:50.261+0200 I STORAGE  Service running
+2015-10-13T09:34:50.589+0200 I JOURNAL  [initandlisten] journal dir=C:\Users\teldi\Documents\GitHub\MobileCloudComputing\data\db\journal
+2015-10-13T09:34:50.590+0200 I JOURNAL  [initandlisten] recover : no journal files present, no recovery needed
+2015-10-13T09:34:50.821+0200 I JOURNAL  [durability] Durability thread started
+2015-10-13T09:34:50.823+0200 I JOURNAL  [journal writer] Journal writer thread started
+2015-10-13T09:34:51.065+0200 I CONTROL  [initandlisten] MongoDB starting : pid=2372 port=27017 dbpath=C:\Users\teldi\Documents\GitHub\MobileCloudComputing\data\db 64-bit host=Teldix-Laptop
+2015-10-13T09:34:51.066+0200 I CONTROL  [initandlisten] targetMinOS: Windows Server 2003 SP2
+2015-10-13T09:34:51.066+0200 I CONTROL  [initandlisten] db version v3.0.6
+2015-10-13T09:34:51.066+0200 I CONTROL  [initandlisten] git version: 1ef45a23a4c5e3480ac919b28afcba3c615488f2
+2015-10-13T09:34:51.066+0200 I CONTROL  [initandlisten] build info: windows sys.getwindowsversion(major=6, minor=1, build=7601, platform=2, service_pack='Service Pack 1') BOOST_LIB_VERSION=1_49
+2015-10-13T09:34:51.066+0200 I CONTROL  [initandlisten] allocator: tcmalloc
+2015-10-13T09:34:51.067+0200 I CONTROL  [initandlisten] options: { config: "E:\MongoDB\mongod.cfg", service: true, storage: { dbPath: "C:\Users\teldi\Documents\GitHub\MobileCloudComputing\data\db" }, systemLog: { destination: "file", path: "C:\Users\teldi\Documents\GitHub\MobileCloudComputing\logs\mongo.log" } }
+2015-10-13T09:34:53.462+0200 I NETWORK  [initandlisten] waiting for connections on port 27017

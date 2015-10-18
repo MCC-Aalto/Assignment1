@@ -1,6 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
+// *** MongoDB connection
+var mongo = require('mongodb');
+
 /* Set User for calendar */
 var user = "";
 
@@ -26,17 +29,52 @@ router.get('/userlist', function(req, res) {
 	});
 });
 
-// *** get all events
-router.get('/calendar', function(req, res) {	
+/* GET user and his events */
+router.get('/userlist/:user', function(req, res) {
 	var db = req.db;
 	var collection = db.get('events');
+	var username = req.params.user;
+	
+	// in events there is no username yet !!!
+	collection.findOne({"username" : username}, function(err, e) {
+		req.send("Error: No Usernames in events now");
+	});
+});
 
-	collection.find({},{},function(e,docs) {
+// *** list all events
+router.get('/calendar', function(req, res) {
+	var db = req.db;
+	var collection = db.get('events');
+	
+	collection.find({},{},function(req,res) {
 		res.render('calendar', {
 			"user" : user,
 			"events" : docs
 		});
 	});
+});
+
+// *** editform for a given event
+router.get('/calendar/:eventId', function(req, res) {	
+	var db = req.db;
+	var collection = db.get('events');
+	var eID = req.params.eventId;	
+
+	console.log(mongo);
+	collection.findOne({"_id" : eID}, function(err, e) {
+		if (err) {
+			res.redirect("calendar");
+		} else {
+			res.render('event', {
+				"event" : e
+			});
+		}
+	});
+});
+
+// *** Update an event
+router.post('/calendar/:eventId', function(req, res) {
+	req.send("Not implemented yet.");
 });
 
 // *** input for new event
@@ -45,7 +83,7 @@ router.get('/newevent', function(req, res) {
 });
 
 // *** add new event to DB
-router.post('/addevent', function(req, res) {
+router.post('/calendar/new', function(req, res) {
 	// *** database connection
 	var db = req.db;
 	var collection = db.get("events");
